@@ -1,13 +1,19 @@
 OUT := sentimentapi
 PKG := github.com/brozeph/sentimentapi
-VERSION := $(shell git describe --always --long --dirty)
+BLD := $(shell date +%FT%T%z)
+VER := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
+
+# to discover variable paths for linking: go tool nm <path_to_binary> | grep <variable_name>
 
 all: run
 
 server:
-	@go build -i -v -o ${OUT} -ldflags="-X main.version=${VERSION}" ${PKG}
+	@go build -i -v -o ${OUT} -ldflags="\
+	-X github.com/brozeph/sentimentapi/resources.Version=${VER} \
+	-X github.com/brozeph/sentimentapi/resources.Build=${BLD} \
+	-X github.com/brozeph/sentimentapi/resources.Package=${PKG}" ${PKG}
 
 test:
 	@go test -short ${PKG_LIST}
@@ -21,7 +27,10 @@ lint:
 	done
 
 static: vet lint
-	@go build -i -v -o ${OUT}-v${VERSION} -tags netgo -ldflags="-extldflags \"-static\" -w -s -X main.version=${VERSION}" ${PKG}
+	@go build -i -v -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
+	-X github.com/brozeph/sentimentapi/resources.Version=${VER} \
+	-X github.com/brozeph/sentimentapi/resources.Build=${BLD} \
+	-X github.com/brozeph/sentimentapi/resources.Package=${PKG}" ${PKG}
 
 run: server
 	./${OUT}

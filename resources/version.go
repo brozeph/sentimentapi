@@ -7,8 +7,15 @@ import (
 	"github.com/go-chi/render"
 )
 
-type Version struct {
-	Name    string `json:"name"`
+var (
+	Build   string
+	Package string
+	Version string
+)
+
+type Response struct {
+	Build   string `json:"build"`
+	Package string `json:"package"`
 	Version string `json:"version"`
 }
 
@@ -19,9 +26,10 @@ func Routes() *chi.Mux {
 }
 
 func getVersion(w http.ResponseWriter, r *http.Request) {
-	version := Version{
-		Name:    "sentimentapi",
-		Version: "v1.0.0",
+	response := Response{
+		Build:   Build,
+		Package: Package,
+		Version: Version,
 	}
-	render.JSON(w, r, version)
+	render.JSON(w, r, response)
 }
