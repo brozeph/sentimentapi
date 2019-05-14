@@ -1,5 +1,5 @@
-OUT := binariy-name
-PKG := gitlab.com/group/project
+OUT := sentimentapi
+PKG := github.com/brozeph/sentimentapi
 VERSION := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
