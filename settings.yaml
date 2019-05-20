@@ -1,0 +1,6 @@
+Data:
+  Mongo:
+    Database: sentiment
+    URL: mongodb://localhost:27017
+Server:
+  Port: 3080
