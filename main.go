@@ -9,8 +9,8 @@ import (
 	middleware "github.com/go-chi/chi/middleware"
 	render "github.com/go-chi/render"
 
-	version "github.com/brozeph/sentimentapi/resources"
-	settings "github.com/brozeph/sentimentapi/settings"
+	version "github.com/brozeph/sentimentapi/internal/resources"
+	settings "github.com/brozeph/sentimentapi/internal/settings"
 )
 
 func Routes() *chi.Mux {
