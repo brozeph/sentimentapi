@@ -44,9 +44,8 @@ func main() {
 	}
 
 	if err := chi.Walk(router, walkFunc); err != nil {
-		log.Panicf("Logging err: %s\n", err.Error())
+		log.Panicf("logging err: %s\n", err.Error())
 	}
 
-	// TODO: build in settings
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", settings.Server.Port), router))
 }
