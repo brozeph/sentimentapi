@@ -31,23 +31,85 @@ Persons (person plural for the purposes of RESTful API design best practices adh
 
 A period is a timeframe for which we wish to collect sentiment.
 
+#### Model
+
+```json
+{
+  "periodId": "<guid>", /* primary key */
+  "requestCount": 0, /* count of requests created for sentiment */
+  "responseCount": 0, /* count of responses received with sentiment */
+  "startDate": "2019-05-29T07:00:00.000Z", /* composite secondary key (startDate + durationHours) */
+  "durationHours": 168
+}
+```
+
+#### Routes
+
 * `GET /v1/periods` - get periods
-* `POST /v1/periods`
-*
+* `POST /v1/periods` - create new periods
+* `PUT /v1/periods` - create/update periods (upsert)
+* `DELETE /v1/periods/{periodId}` - delete single person
+* `GET /v1/periods/{periodId}` - get single person
+* `PUT /v1/periods/{periodId}` - update single person
+
+### categories
+
+Categories exist in order to allow more than one type of request for sentiment to be issued per period.
+
+#### Model
+
+```json
+{
+  "categoryId": "<guid>", /* primary key */
+}
+```
+
+#### Routes
 
 ### requests
+
+A request for sentiment references the period and person to whom the request is being issued. Within the request, when a response is received, the responsePeriodId is populated with a periodId, but not the exact date of the response so that correllation between the request and the person responding is not traceable when more than one request has been issued and responded to.
+
+#### Model
+
+```json
+{
+  "requestId": "<guid>", /* primary key */
+  "periodId": "<guid>", /* composite secondary key (periodId + personId) */
+  "personId": "<guid>",
+  "createdAt": "2019-05-29T07:00:00.000Z",
+  "responsePeriodId":  "<guid>", /* period within which response was received */
+  "data": {}
+}
+```
+
+#### Routes
 
 `GET /v1/persons/{personId}/requests`
 `GET /v1/periods/{periodId}/requests`
 `GET /v1/requests`
 `POST /v1/requests`
-
-#### individual requests
-
 `GET /v1/requests/{requestId}`
 `DELETE /v1/requests/{requestId}`
 
 ### responses
+
+Responses apply to requests and refer to the period of the request.
+
+TODO: add a grouping for requests and apply to responses so that multiple types of sentiment requests can be sent per period
+
+#### Model
+
+```json
+{
+  "responseId": "<guid>", /* primary key */
+  "periodId": "<guid>", /* period for which the sentiment applies */
+  "createdAt": "2019-05-29T07:00:00.000Z",
+  "data": {}
+}
+```
+
+#### Routes
 
 `GET /v1/periods/{periodId}/responses`
 `GET /v1/responses`
