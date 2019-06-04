@@ -1,6 +1,16 @@
 # Sentiment API
 
+The sentiment API is a simple REST endpoint for storage and retrieval of sentiment requests and responses for a specified group of people. This API is designed to support team feedback and to serve as a mechanism for gaining insight into current team morale.
+
 ## Resources
+
+This API supports a number of resources for data retrieval and modification:
+
+* [persons](#persons)
+* [periods](#periods)
+* [categories](#categories)
+* [requests](#requests)
+* [responses](#responses)
 
 ### persons
 
@@ -31,7 +41,7 @@ Persons (person plural for the purposes of RESTful API design best practices adh
 
 A period is a timeframe for which we wish to collect sentiment.
 
-#### Model
+#### periods model
 
 ```json
 {
@@ -43,7 +53,7 @@ A period is a timeframe for which we wish to collect sentiment.
 }
 ```
 
-#### Routes
+#### periods routes
 
 * `GET /v1/periods` - get periods
 * `POST /v1/periods` - create new periods
@@ -56,7 +66,7 @@ A period is a timeframe for which we wish to collect sentiment.
 
 Categories exist in order to allow more than one type of request for sentiment to be issued per period.
 
-#### Model
+#### categories model
 
 ```json
 {
@@ -64,13 +74,13 @@ Categories exist in order to allow more than one type of request for sentiment t
 }
 ```
 
-#### Routes
+#### categories routes
 
 ### requests
 
 A request for sentiment references the period and person to whom the request is being issued. Within the request, when a response is received, the responsePeriodId is populated with a periodId, but not the exact date of the response so that correllation between the request and the person responding is not traceable when more than one request has been issued and responded to.
 
-#### Model
+#### requests model
 
 ```json
 {
@@ -83,7 +93,7 @@ A request for sentiment references the period and person to whom the request is 
 }
 ```
 
-#### Routes
+#### requests routes
 
 `GET /v1/persons/{personId}/requests`
 `GET /v1/periods/{periodId}/requests`
@@ -98,7 +108,7 @@ Responses apply to requests and refer to the period of the request.
 
 TODO: add a grouping for requests and apply to responses so that multiple types of sentiment requests can be sent per period
 
-#### Model
+#### responses model
 
 ```json
 {
@@ -109,7 +119,7 @@ TODO: add a grouping for requests and apply to responses so that multiple types 
 }
 ```
 
-#### Routes
+#### responses routes
 
 `GET /v1/periods/{periodId}/responses`
 `GET /v1/responses`
@@ -130,3 +140,5 @@ make
 ```
 
 ### Test
+
+Coming soon.
