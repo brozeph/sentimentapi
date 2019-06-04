@@ -20,7 +20,7 @@ Persons (person plural for the purposes of RESTful API design best practices adh
 
 **DRAFT**: more fields to be added as appropriate
 
-```json
+```javascript
 {
   "personId": "<guid>", /* primary key */
   "email": "jthomas@apptio.com", /* secondary key - used for upsert */
@@ -43,7 +43,7 @@ A period is a timeframe for which we wish to collect sentiment.
 
 #### periods model
 
-```json
+```javascript
 {
   "periodId": "<guid>", /* primary key */
   "requestCount": 0, /* count of requests created for sentiment */
@@ -68,7 +68,7 @@ Categories exist in order to allow more than one type of request for sentiment t
 
 #### categories model
 
-```json
+```javascript
 {
   "categoryId": "<guid>", /* primary key */
 }
@@ -82,7 +82,7 @@ A request for sentiment references the period and person to whom the request is 
 
 #### requests model
 
-```json
+```javascript
 {
   "requestId": "<guid>", /* primary key */
   "periodId": "<guid>", /* composite secondary key (periodId + personId) */
@@ -110,7 +110,7 @@ TODO: add a grouping for requests and apply to responses so that multiple types 
 
 #### responses model
 
-```json
+```javascript
 {
   "responseId": "<guid>", /* primary key */
   "periodId": "<guid>", /* period for which the sentiment applies */
