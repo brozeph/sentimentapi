@@ -95,12 +95,12 @@ A request for sentiment references the period and person to whom the request is 
 
 #### requests routes
 
-`GET /v1/persons/{personId}/requests`
-`GET /v1/periods/{periodId}/requests`
-`GET /v1/requests`
-`POST /v1/requests`
-`GET /v1/requests/{requestId}`
-`DELETE /v1/requests/{requestId}`
+* `GET /v1/persons/{personId}/requests`
+* `GET /v1/periods/{periodId}/requests`
+* `GET /v1/requests`
+* `POST /v1/requests`
+* `GET /v1/requests/{requestId}`
+* `DELETE /v1/requests/{requestId}`
 
 ### responses
 
