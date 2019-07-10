@@ -1,5 +1,5 @@
-OUT := sentimentapi
-PKG := github.com/brozeph/sentimentapi
+OUT := dist/sentimentapi
+PKG := github.com/brozeph/sentimentapi/cmd
 BLD := $(shell date +%FT%T%z)
 VER := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
@@ -10,10 +10,10 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 all: run
 
 server:
-	@go build -i -v -o ${OUT} -ldflags="\
-	-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
-	-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}
+	@go build -i -o ${OUT} -ldflags="\
+		-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
+		-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
+		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}
 
 test:
 	@go test -short ${PKG_LIST}
@@ -27,7 +27,7 @@ lint:
 	done
 
 static: vet lint
-	@go build -i -v -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
+	@go build -i -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
 	-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
 	-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
 	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}
@@ -36,6 +36,7 @@ run: server
 	./${OUT}
 
 clean:
-	-@rm ${OUT} ${OUT}-v*
+	@rm -r dist
+	@mkdir dist
 
 .PHONY: run server static vet lint

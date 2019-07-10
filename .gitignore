@@ -19,3 +19,6 @@ sentimentapi
 ### Go Patch ###
 /vendor/
 /Godeps/
+
+# build output
+/bin/
