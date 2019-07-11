@@ -1,4 +1,4 @@
-OUT := dist/sentimentapi
+OUT := bin/sentimentapi
 PKG := github.com/brozeph/sentimentapi/cmd
 BLD := $(shell date +%FT%T%z)
 VER := $(shell git describe --always --long --dirty)
@@ -36,7 +36,7 @@ run: server
 	./${OUT}
 
 clean:
-	@rm -r dist
-	@mkdir dist
+	@rm -r bin
+	@mkdir bin
 
 .PHONY: run server static vet lint
