@@ -1,5 +1,5 @@
 OUT := bin/sentimentapi
-PKG := github.com/brozeph/sentimentapi/cmd
+PKG := github.com/brozeph/sentimentapi
 BLD := $(shell date +%FT%T%z)
 VER := $(shell git describe --always --long --dirty)
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
@@ -13,7 +13,7 @@ server:
 	@go build -i -o ${OUT} -ldflags="\
 		-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
 		-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}
+		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
 
 test:
 	@go test -short ${PKG_LIST}
@@ -30,7 +30,7 @@ static: vet lint
 	@go build -i -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
 	-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
 	-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}
+	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
 
 run: server
 	./${OUT}
