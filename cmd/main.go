@@ -6,29 +6,10 @@ import (
 	"net/http"
 
 	chi "github.com/go-chi/chi"
-	middleware "github.com/go-chi/chi/middleware"
-	render "github.com/go-chi/render"
 
-	version "github.com/brozeph/sentimentapi/internal/resources"
+	resources "github.com/brozeph/sentimentapi/internal/resources/cmd"
 	settings "github.com/brozeph/sentimentapi/internal/settings"
 )
-
-func Routes() *chi.Mux {
-	router := chi.NewRouter()
-	router.Use(
-		render.SetContentType(render.ContentTypeJSON), // Set content-type headers as application/json
-		middleware.Logger,          // Log API requests
-		middleware.DefaultCompress, // gzip JSON responses
-		middleware.RedirectSlashes, // redirect slaches to no slash URL version
-		middleware.Recoverer,       // Recover from panic without server crash
-	)
-
-	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/version", version.Routes())
-	})
-
-	return router
-}
 
 func main() {
 	settings, err := settings.New()
@@ -36,7 +17,7 @@ func main() {
 		log.Panicln("exception occurred loading settings", err)
 	}
 
-	router := Routes()
+	router := resources.Routes(settings)
 
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 		log.Printf("%s %s\n", method, route)
