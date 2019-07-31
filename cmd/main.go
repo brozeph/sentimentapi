@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	settings, err := settings.New()
+	settings, err := settings.NewSettings()
 	if err != nil {
 		log.Panicln("exception occurred loading settings", err)
 	}
@@ -28,7 +28,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	data, err := data.NewDataClient(settings, ctx)
+	data, err := data.NewClient(settings, ctx)
 	if err != nil {
 		log.Panicln("exception occurred establishing connection to database", err)
 	}

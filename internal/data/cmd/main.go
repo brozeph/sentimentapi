@@ -10,14 +10,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type DataClient struct {
+// Client struct is composed of the mongo client, context, settings and a mapper for
+// translating person objects to the underlying data store.
+type Client struct {
 	Client       *mongo.Client
 	Context      context.Context
 	PersonMapper *persons.PersonMapper
 	Settings     *settings.Settings
 }
 
-func NewDataClient(settings *settings.Settings, ctx context.Context) (*DataClient, error) {
+func NewClient(settings *settings.Settings, ctx context.Context) (*Client, error) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(settings.Data.Mongo.URL))
 	if err != nil {
 		log.Printf("unable to create MongoDB client with URL: %s", settings.Data.Mongo.URL)
@@ -33,7 +35,7 @@ func NewDataClient(settings *settings.Settings, ctx context.Context) (*DataClien
 	}
 
 	// construct new data client
-	dataClient := new(DataClient)
+	dataClient := new(Client)
 	dataClient.Client = client
 	dataClient.Context = ctx
 	dataClient.PersonMapper = persons.NewPersonMapper(settings, client, ctx)

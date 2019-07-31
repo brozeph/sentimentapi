@@ -8,11 +8,15 @@ import (
 )
 
 const (
+	// DefaultDataTimeout is the default timeout for all operations performed in the MongoDB database
 	DefaultDataTimeout = "5s"
-	DefaultDataURL     = "mongodb://localhost:27017"
-	DefaultPort        = "3080"
+	// DefaultDataURL is the default URL for the MongoDB database
+	DefaultDataURL = "mongodb://localhost:27017"
+	// DefaultPort is the default Port to use for the MongoDB database
+	DefaultPort = "3080"
 )
 
+// Settings contain the configuration for the runtime operation of this API
 type Settings struct {
 	Data struct {
 		Mongo struct {
@@ -26,7 +30,8 @@ type Settings struct {
 	}
 }
 
-func New() (*Settings, error) {
+// NewSettings provides a new settings object loaded with pertinent configuration
+func NewSettings() (*Settings, error) {
 	settings, err := initViper()
 	if err != nil {
 		return &settings, err
