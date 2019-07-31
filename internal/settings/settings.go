@@ -8,14 +8,17 @@ import (
 )
 
 const (
-	DefaultPort = "3080"
+	DefaultDataTimeout = "5s"
+	DefaultDataURL     = "mongodb://localhost:27017"
+	DefaultPort        = "3080"
 )
 
 type Settings struct {
 	Data struct {
 		Mongo struct {
-			URL      string
 			Database string
+			Timeout  string
+			URL      string
 		}
 	}
 	Server struct {
@@ -35,24 +38,29 @@ func New() (*Settings, error) {
 func initViper() (Settings, error) {
 	viper.SetConfigName("settings") // Configuration fileName without the .TOML or .YAML extension
 	viper.AddConfigPath(".")        // Search the root directory for the configuration file
+	viper.WatchConfig()             // Watch for changes to the configuration file and recompile
 
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
+	// reload when there are configuration changes
+	viper.OnConfigChange(func(e fsnotify.Event) {
+		log.Printf("settings file changes detected: %s", e.Name)
+		if err := viper.ReadInConfig(); err != nil {
+			log.Printf("unable to re-read configuration changes found in %s", e.Name)
+		}
+	})
+
+	// set configuration defaults
+	viper.SetDefault("Data.Mongo.Timeout", DefaultDataTimeout)
+	viper.SetDefault("Data.Mongo.URL", DefaultDataURL)
+	viper.SetDefault("Server.Port", DefaultPort)
+
+	// read configuration file in for the first time
+	if err := viper.ReadInConfig(); err != nil {
+		log.Printf("unable to read settings file")
 		return Settings{}, err
 	}
 
-	viper.WatchConfig() // Watch for changes to the configuration file and recompile
-	viper.OnConfigChange(func(e fsnotify.Event) {
-		log.Printf("settings file changes detected: %s", e.Name)
-	})
-
-	viper.SetDefault("Server.Port", DefaultPort)
-	if err = viper.ReadInConfig(); err != nil {
-		log.Panicf("error encountered while reading settings file: %s", err)
-	}
-
 	var settings Settings
-	err = viper.Unmarshal(&settings)
+	err := viper.Unmarshal(&settings)
 
 	return settings, err
 }

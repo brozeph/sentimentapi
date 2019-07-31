@@ -28,5 +28,4 @@ func Routes(settings *settings.Settings) *chi.Mux {
 	return router
 }
 
-func main() {
-}
+func main() {}

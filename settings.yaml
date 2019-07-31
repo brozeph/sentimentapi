@@ -1,6 +1,7 @@
 Data:
   Mongo:
-    Database: sentiment
+    Database: sentiment-test
+    Timeout: 5s
     URL: mongodb://localhost:27017
 Server:
   Port: 3080
