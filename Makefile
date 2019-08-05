@@ -9,22 +9,26 @@ GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/)
 
 all: run
 
-server:
-	@go build -i -o ${OUT} -ldflags="\
-		-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
-		-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
-
-test:
-	@go test -short ${PKG_LIST}
-
-vet:
-	@go vet ${PKG_LIST}
+clean:
+	@rm -r bin
+	@mkdir bin
 
 lint:
 	@for file in ${GO_FILES} ;  do \
 		golint $$file ; \
 	done
+
+mongodb:
+	./third_party/mongodb.sh
+
+run: mongodb server
+	./${OUT}
+
+server:
+	@go build -i -o ${OUT} -ldflags="\
+		-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
+		-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
+		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
 
 static: vet lint
 	@go build -i -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
@@ -32,11 +36,10 @@ static: vet lint
 	-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
 	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
 
-run: server
-	./${OUT}
+test:
+	@go test -short ${PKG_LIST}
 
-clean:
-	@rm -r bin
-	@mkdir bin
+vet:
+	@go vet ${PKG_LIST}
 
-.PHONY: run server static vet lint
+.PHONY: run server static vet lint mongodb
