@@ -19,7 +19,7 @@ lint:
 	done
 
 mongodb:
-	./third_party/mongodb.sh
+	./third_party/mongodb_docker.sh
 
 run: mongodb server
 	./${OUT}
