@@ -11,9 +11,9 @@ all: run
 
 server:
 	@go build -i -o ${OUT} -ldflags="\
-		-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
-		-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-		-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
+		-X ${PKG}/internal/resources.Version=${VER} \
+		-X ${PKG}/internal/resources.Build=${BLD} \
+		-X ${PKG}/internal/resources.Package=${PKG}" ${PKG}/cmd
 
 test:
 	@go test -short ${PKG_LIST}
@@ -28,9 +28,9 @@ lint:
 
 static: vet lint
 	@go build -i -o ${OUT}-v${VER} -tags netgo -ldflags="-extldflags \"-static\" -w -s \
-	-X github.com/brozeph/sentimentapi/internal/resources.Version=${VER} \
-	-X github.com/brozeph/sentimentapi/internal/resources.Build=${BLD} \
-	-X github.com/brozeph/sentimentapi/internal/resources.Package=${PKG}" ${PKG}/cmd
+		-X ${PKG}/internal/resources.Version=${VER} \
+		-X ${PKG}/internal/resources.Build=${BLD} \
+		-X ${PKG}/internal/resources.Package=${PKG}" ${PKG}/cmd
 
 run: server
 	./${OUT}
